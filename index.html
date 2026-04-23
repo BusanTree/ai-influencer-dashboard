@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI 인플루언서 관리 대시보드</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("personaDeskTheme");
+        var preferred = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = saved || preferred;
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="주요 메뉴">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">A</div>
+          <div>
+            <p class="eyebrow">AI Influencer Ops</p>
+            <h1>Persona Desk</h1>
+          </div>
+        </div>
+
+        <nav class="nav-stack">
+          <button class="nav-item active" type="button">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5h7v7H4zM13 5h7v4h-7zM13 11h7v8h-7zM4 14h7v5H4z"/></svg>
+            </span>
+            전체 현황
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 9a7 7 0 0 1 14 0Z"/></svg>
+            </span>
+            인플루언서
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 3v10h12V7Zm2 8 2.4-3 1.8 2.1 2.1-2.7L17 15Z"/></svg>
+            </span>
+            미디어 보관함
+          </button>
+          <button class="nav-item" type="button">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 3h2v3h6V3h2v3h3v15H4V6h3Zm-1 8v8h12v-8Zm0-3v1h12V8Z"/></svg>
+            </span>
+            캠페인 일정
+          </button>
+        </nav>
+
+        <div class="sidebar-card">
+          <p class="eyebrow">이번 주 집중</p>
+          <strong id="sidebarFocus">릴스 승인 4건</strong>
+          <span>업로드된 이미지와 영상을 인플루언서별로 바로 확인하세요.</span>
+        </div>
+      </aside>
+
+      <main class="dashboard">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">운영 대시보드</p>
+            <h2>AI 인플루언서 관리</h2>
+          </div>
+          <div class="topbar-actions">
+            <label class="search-box" for="searchInput">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20.4 18.9-4.2-4.2a7 7 0 1 0-1.5 1.5l4.2 4.2ZM5 10.5a5.5 5.5 0 1 1 5.5 5.5A5.5 5.5 0 0 1 5 10.5Z"/></svg>
+              <input id="searchInput" type="search" placeholder="이름, 채널, 콘셉트 검색" autocomplete="off" />
+              <span class="command-key">Ctrl K</span>
+            </label>
+            <button id="themeToggleBtn" class="theme-toggle" type="button" aria-label="다크 모드로 전환">
+              <span class="sun-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M11 2h2v3h-2Zm0 17h2v3h-2ZM4.2 5.6l1.4-1.4 2.1 2.1-1.4 1.4Zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4ZM2 11h3v2H2Zm17 0h3v2h-3ZM4.2 18.4l2.1-2.1 1.4 1.4-2.1 2.1Zm12.1-12.1 2.1-2.1 1.4 1.4-2.1 2.1ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg>
+              </span>
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span class="moon-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20.4 15.4A8.7 8.7 0 0 1 8.6 3.6a8.8 8.8 0 1 0 11.8 11.8Z"/></svg>
+              </span>
+            </button>
+            <button id="addInfluencerBtn" class="primary-btn" type="button">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6Z"/></svg>
+              새 인플루언서
+            </button>
+          </div>
+        </header>
+
+        <section class="metric-grid" aria-label="요약 지표">
+          <article class="metric-card">
+            <span>운영 중</span>
+            <strong id="metricActive">0</strong>
+            <small>활성 인플루언서</small>
+          </article>
+          <article class="metric-card">
+            <span>보관 미디어</span>
+            <strong id="metricMedia">0</strong>
+            <small>이미지와 영상</small>
+          </article>
+          <article class="metric-card">
+            <span>승인 대기</span>
+            <strong id="metricReview">0</strong>
+            <small>확인이 필요한 항목</small>
+          </article>
+          <article class="metric-card accent">
+            <span>이번 주 일정</span>
+            <strong id="metricSchedule">0</strong>
+            <small>캠페인 작업</small>
+          </article>
+        </section>
+
+        <div class="workgrid">
+          <section class="panel roster-panel" aria-label="인플루언서 목록">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Roster</p>
+                <h3>인플루언서 목록</h3>
+              </div>
+              <div class="segmented" role="group" aria-label="상태 필터">
+                <button class="filter-btn active" type="button" data-filter="all">전체</button>
+                <button class="filter-btn" type="button" data-filter="active">활성</button>
+                <button class="filter-btn" type="button" data-filter="review">검토</button>
+              </div>
+            </div>
+            <div id="influencerList" class="influencer-list"></div>
+          </section>
+
+          <section class="panel media-panel" aria-label="선택한 인플루언서 미디어">
+            <div id="profileHero" class="profile-hero"></div>
+
+            <div class="tabbar" role="tablist" aria-label="상세 보기">
+              <button type="button">개요</button>
+              <button type="button" class="active">미디어</button>
+              <button type="button">캠페인</button>
+              <button type="button">일정</button>
+              <button type="button">분석</button>
+            </div>
+
+            <div class="media-toolbar">
+              <div>
+                <p class="eyebrow">Media Library</p>
+                <h3>이미지 / 영상 관리</h3>
+              </div>
+              <div class="toolbar-actions">
+                <button id="showAllMediaBtn" class="ghost-btn active" type="button">전체</button>
+                <button id="showImageMediaBtn" class="ghost-btn" type="button">이미지</button>
+                <button id="showVideoMediaBtn" class="ghost-btn" type="button">영상</button>
+              </div>
+            </div>
+
+            <div id="mediaGrid" class="media-grid"></div>
+
+            <label id="dropZone" class="drop-zone" for="mediaInput">
+              <input id="mediaInput" type="file" accept="image/*,video/*" multiple />
+              <span class="drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M11 16V7.8L8.1 10.7 6.7 9.3 12 4l5.3 5.3-1.4 1.4L13 7.8V16Zm-6 4v-5h2v3h10v-3h2v5Z"/></svg>
+              </span>
+              <span>
+                <strong>이미지나 영상을 여기에 추가</strong>
+                <small>클릭하거나 파일을 끌어다 놓으면 선택한 인플루언서에 저장됩니다.</small>
+              </span>
+            </label>
+
+            <div class="content-strip">
+              <div>
+                <div class="strip-heading">
+                  <div>
+                    <p class="eyebrow">Upcoming Content</p>
+                    <h3>다가오는 콘텐츠</h3>
+                  </div>
+                  <button class="ghost-btn" type="button">일정 보기</button>
+                </div>
+                <div id="calendarStrip" class="calendar-strip"></div>
+              </div>
+              <div class="activity-card">
+                <div class="activity-heading">
+                  <p class="eyebrow">Activity</p>
+                  <strong>최근 흐름</strong>
+                </div>
+                <div id="activityList" class="activity-list"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <dialog id="profileDialog" class="profile-dialog">
+      <div class="profile-dialog-card">
+        <div class="panel-heading compact">
+          <div>
+            <p class="eyebrow">Profile Detail</p>
+            <h3>상세 관리</h3>
+          </div>
+          <div class="dialog-actions">
+            <button id="deleteInfluencerBtn" class="icon-btn danger" type="button" title="삭제" aria-label="삭제">
+              <svg viewBox="0 0 24 24"><path d="M8 4h8l1 2h4v2H3V6h4Zm-2 6h12l-1 11H7Z"/></svg>
+            </button>
+            <button id="closeProfileDialogBtn" class="icon-btn" type="button" title="닫기" aria-label="닫기">
+              <svg viewBox="0 0 24 24"><path d="m6.4 5 12.6 12.6-1.4 1.4L5 6.4Zm12.6 1.4L6.4 19 5 17.6 17.6 5Z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <form id="profileForm" class="profile-form">
+          <label>
+            이름
+            <input name="name" type="text" required />
+          </label>
+          <label>
+            계정
+            <input name="handle" type="text" required />
+          </label>
+          <label>
+            채널
+            <select name="platform">
+              <option>Instagram</option>
+              <option>TikTok</option>
+              <option>YouTube Shorts</option>
+              <option>X</option>
+            </select>
+          </label>
+          <label>
+            운영 상태
+            <select name="status">
+              <option value="active">활성</option>
+              <option value="review">검토</option>
+              <option value="paused">보류</option>
+            </select>
+          </label>
+          <label>
+            콘셉트
+            <input name="niche" type="text" required />
+          </label>
+          <label>
+            말투 / 분위기
+            <textarea name="tone" rows="3"></textarea>
+          </label>
+          <label>
+            다음 할 일
+            <textarea name="nextAction" rows="3"></textarea>
+          </label>
+          <button class="primary-btn full" type="submit">변경 내용 저장</button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="mediaDialog" class="media-dialog">
+      <div class="dialog-card">
+        <button id="closeDialogBtn" class="icon-btn close" type="button" title="닫기" aria-label="닫기">
+          <svg viewBox="0 0 24 24"><path d="m6.4 5 12.6 12.6-1.4 1.4L5 6.4Zm12.6 1.4L6.4 19 5 17.6 17.6 5Z"/></svg>
+        </button>
+        <div id="dialogMedia" class="dialog-media"></div>
+        <div id="dialogMeta" class="dialog-meta"></div>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
